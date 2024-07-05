@@ -1,2 +1,2 @@
-# bit-stock-v2
-django
+# template-django-tailwind
+here is my django tailwind template
