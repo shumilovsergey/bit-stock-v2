@@ -3,13 +3,11 @@ version: '3'
 services:
   app:
     platform: linux/x86_64
-    # image name from github workflow
     image: ${IMAGE_NAME}
     ports:
       - "${PORT:-8000}:8000"
     restart: always
-    # repo name from github workflow
-    container_name: "${REPO_NAME}"
+    container_name: "${CONTAINER_NAME}"
     environment:
       - ALLOWED_HOSTS=localhost 127.0.0.1
       - TOKEN_TG=${TOKEN_TG:-noenv}
