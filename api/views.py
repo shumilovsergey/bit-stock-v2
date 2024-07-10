@@ -9,6 +9,7 @@ from server.const import HOST_DNS
 class Main(View):
     def get(self, request):
         bot_name = BOT_NAME
+        print(BOT_NAME)
         session_id = request.session["session_id"]
         auth = request.session["auth"]
         return render(request, 'main.html', {"bot_name":bot_name, "session_id":session_id, "auth":auth, "dns":HOST_DNS})
