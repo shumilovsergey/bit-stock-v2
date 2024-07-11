@@ -1,6 +1,7 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from .models import TelegramUsers
+from .models import UserCard
 from django.http import JsonResponse
 
 from server.const import BOT_NAME
@@ -41,3 +42,39 @@ class Logout(View):
         request.session["name"]=None
         request.session["org_select"]=None
         return redirect("/")
+    
+# UserCard
+class Card(View):
+    def get(self, request):
+        session_id = request.session["session_id"]
+
+        if not TelegramUsers.objects.filter(session_id=session_id).exists():
+            info = "вы не авторизовались"
+            return render(request, 'info.html', {"info":info})
+        
+        user = TelegramUsers.objects.get(session_id=session_id)    
+
+        if not UserCard.objects.filter(tg_id=user.tg_id).exists():
+            user_card = UserCard.objects.create(tg_id=user.tg_id)
+            user_card.save()
+
+        user_card = UserCard.objects.get(tg_id=user.tg_id)
+        return render(request, 'user_card/card.html', {"user_card":user_card})
+
+    def post(self, request):
+        session_id = request.session["session_id"]        
+        user = TelegramUsers.objects.get(session_id=session_id)
+        user_card = UserCard.objects.get(tg_id=user.tg_id)
+        user_card.name = request.POST["name"]
+        user_card.second_name = request.POST["second_name"]
+        user_card.third_name = request.POST["third_name"]
+        user_card.tg_add =request.POST["tg_add"]
+        user_card.save()
+
+        return redirect("/user_card/")
+        
+
+
+
+
+        

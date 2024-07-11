@@ -14,7 +14,7 @@
     {% if request.session.auth %}
     <div class="bg-amber-50 shadow-md flex pl-10 items-center justify-between">
         <div class="flex">
-            <form action="{% url 'api:main' %}" method="GET">
+            <form action="{% url 'api:user_card' %}" method="GET">
                 <button class="hover:bg-stone-300 h-10 w-40 items-center flex justify-center duration-500 text-lg">
                     <pre>{{request.session.name}}</pre>
                 </button>
@@ -30,8 +30,8 @@
 
     {% endif %}
 
-    <div class="px-10 mt-32">
-    {% block content %}{% endblock %}
+    <div class="px-32 mt-32 font-extralight text-lg">
+        {% block content %}{% endblock %}
     </div>
 
 

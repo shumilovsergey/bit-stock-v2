@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}
+bit-stock
+{% endblock %}
+{% block content %}
+{% load static %}
+
+<div class="shadow-md border-stone-700 w-[700px] border rounded-2xl bg-amber-50 pl-10 pr-10 pt-3">
+    <pre class="">карточка пользователя:</pre>
+
+    <form class="pt-10" method="post" action="{% url 'api:user_card' %}" >
+        {% csrf_token %}
+        <div class="flex justify-between pb-3">
+            <div class="pl-10 pt-[5px]">имя</div>
+            <input required value={{user_card.name}} name="name" type="text" autocomplete="off" maxlength="56" class="h-10 w-[450px] shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700">
+        </div>
+
+        <div class="flex justify-between pb-3">
+            <div class="pl-10 pt-[5px]">фамилия</div>
+            <input required value={{user_card.second_name}} name="second_name" type="text" autocomplete="off" maxlength="56" class="h-10 w-[450px] shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700">
+        </div>
+
+        <div class="flex justify-between pb-3">
+            <div class="pl-10 pt-[5px]">отчество</div>
+            <input required value={{user_card.third_name}} name="third_name" type="text" autocomplete="off" maxlength="56" class="h-10 w-[450px] shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700">
+        </div>
+
+        <div class="flex justify-between pb-5">
+            <div class="pl-10 pt-[5px]">телеграм</div>
+            <input required value={{user_card.tg_add}} name="tg_add" type="text" autocomplete="off" maxlength="56" class="h-10 w-[450px] shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700">
+        </div>    
+
+        <div class="pb-5 flex justify-end">
+            <button class="h-10 px-4 border rounded-xl border-stone-700 hover:border-2 hover:border-b-4 shadow-md">сохранить</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
