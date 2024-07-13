@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}
+bit-stock
+{% endblock %}
+{% block content %}
+{% load static %}
+
+
+<input class="mb-10 h-10 w-[200px] shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="searchInput" placeholder="поиск..." onkeyup="filterTable()">
+<div class="">
+    <table id="table" class="">
+        <thead class="">
+            <tr class="">
+                <th class="rounded-tl-2xl bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">имя</th>
+                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">фамилия</th>
+                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">отчество</th>
+                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">телеграм</th>
+                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">должность</th>
+                <th class="rounded-tr-2xl bg-amber-100 border-b border-stone-700 text-left px-8 py-4 font-normal">магазин</th>
+            </tr>
+        </thead>
+
+        <tbody class="">
+            {% for user in add_book %}
+            {% if user.valid %}
+            <tr class="">
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.name}}</td>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.second_name}}</td>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.third_name}}</td>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">
+                    <div class="flex justify-between">
+                        @{{user.tg_add}}
+                        <a href="https://t.me/{{user.tg_add}}" class="pl-10">
+                            <img src="{% static 'telegram-2.png' %}" class="w-8 h-8 rounded-xl border-stone-700 hover:border-1 hover:border-b-2">
+                        </a>
+                    </div>
+
+                </td>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.position}}</td>
+                <td class="bg-amber-50 border-b border-stone-700 text-left px-8 py-4">{{user.shop}}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+    function filterTable() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let table = document.getElementById('table');
+        let rows = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < rows.length; i++) {
+            let row = rows[i];
+            let cells = row.getElementsByTagName('td');
+            let rowContainsInput = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                let cell = cells[j];
+                if (cell) {
+                    let txtValue = cell.textContent || cell.innerText;
+                    if (txtValue.toLowerCase().indexOf(input) > -1) {
+                        rowContainsInput = true;
+                        break;
+                    }
+                }
+            }
+
+            if (rowContainsInput) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    }
+</script>
+
+{% endblock %}

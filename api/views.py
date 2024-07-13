@@ -1,8 +1,10 @@
 from django.views import View
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
+
 from .models import TelegramUsers
 from .models import UserCard
-from django.http import JsonResponse
+from .models import Shop
 
 from server.const import BOT_NAME
 from server.const import HOST_DNS
@@ -10,7 +12,6 @@ from server.const import HOST_DNS
 class Main(View):
     def get(self, request):
         bot_name = BOT_NAME
-        print(BOT_NAME)
         session_id = request.session["session_id"]
         auth = request.session["auth"]
         return render(request, 'main.html', {"bot_name":bot_name, "session_id":session_id, "auth":auth, "dns":HOST_DNS})
@@ -62,19 +63,27 @@ class Card(View):
         return render(request, 'user_card/card.html', {"user_card":user_card})
 
     def post(self, request):
+
         session_id = request.session["session_id"]        
         user = TelegramUsers.objects.get(session_id=session_id)
         user_card = UserCard.objects.get(tg_id=user.tg_id)
         user_card.name = request.POST["name"]
         user_card.second_name = request.POST["second_name"]
         user_card.third_name = request.POST["third_name"]
-        user_card.tg_add =request.POST["tg_add"]
+        user_card.tg_add =request.POST["tg_add"].replace("@", "")
         user_card.save()
 
         return redirect("/user_card/")
         
+# add_book
+class AddBook(View):
+    def get(self, request):
+        add_book = []
+        shops = Shop.objects.all()
+        for shop in shops:
+            user_cards = shop.usercard_set.all()
+            for user_card in user_cards:
+                add_book.append(user_card)
 
+        return render(request, 'user_card/add_book.html', {'add_book':add_book})
 
-
-
-        

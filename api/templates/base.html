@@ -21,11 +21,18 @@
             </form>
         </div>
 
-        <form action="{% url 'api:logout' %}" method="GET">
-            <button class="hover:bg-stone-300 h-10 w-40 items-center flex justify-center duration-500 text-lg">
-                <pre>logout</pre>
-            </button>
-        </form>
+        <div class="flex w-80">
+            <form action="{% url 'api:add_book' %}" method="GET">
+                <button class="hover:bg-stone-300 h-10 w-40 items-center flex justify-center duration-500 text-lg">
+                    <pre>сотрудники</pre>
+                </button>
+            </form>
+            <form action="{% url 'api:logout' %}" method="GET">
+                <button class="hover:bg-stone-300 h-10 w-40 items-center flex justify-center duration-500 text-lg">
+                    <pre>logout</pre>
+                </button>
+            </form>
+        </div>
     </div>
 
     {% endif %}
