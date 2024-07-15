@@ -46,6 +46,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'api.middleware.CheckSessionMiddleware',
     'api.middleware.SessionDebuger',
+    'api.middleware.AccessCheckMiddleware',
 ]
 
 ROOT_URLCONF = 'server.urls'

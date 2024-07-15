@@ -11,22 +11,22 @@ bit-stock
     <table id="table" class="">
         <thead class="">
             <tr class="">
-                <th class="rounded-tl-2xl bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">имя</th>
-                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">фамилия</th>
+                <th class="rounded-tl-2xl bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">id</th>
+                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">имя</th>
                 <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">отчество</th>
+                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">фамилия</th>
                 <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">телеграм</th>
-                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">должность</th>
                 <th class="rounded-tr-2xl bg-amber-100 border-b border-stone-700 text-left px-8 py-4 font-normal">магазин</th>
             </tr>
         </thead>
 
         <tbody class="">
             {% for user in add_book %}
-            {% if user.valid %}
             <tr class="">
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.tg_id}}</td>
                 <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.name}}</td>
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.second_name}}</td>
                 <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.third_name}}</td>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.second_name}}</td>
                 <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">
                     <div class="flex justify-between">
                         @{{user.tg_add}}
@@ -36,10 +36,8 @@ bit-stock
                     </div>
 
                 </td>
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{user.position}}</td>
                 <td class="bg-amber-50 border-b border-stone-700 text-left px-8 py-4">{{user.shop}}</td>
             </tr>
-            {% endif %}
             {% endfor %}
         </tbody>
     </table>

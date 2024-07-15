@@ -41,7 +41,6 @@ class Logout(View):
         request.session["session_id"]=None
         request.session["auth"]=None
         request.session["name"]=None
-        request.session["org_select"]=None
         return redirect("/")
     
 # UserCard
@@ -53,14 +52,19 @@ class Card(View):
             info = "вы не авторизовались"
             return render(request, 'info.html', {"info":info})
         
-        user = TelegramUsers.objects.get(session_id=session_id)    
+        user = TelegramUsers.objects.get(session_id=session_id)
+
+        if not Shop.objects.exists():
+            shop = Shop.objects.create(name="unsort")
+            shop.save()
 
         if not UserCard.objects.filter(tg_id=user.tg_id).exists():
             user_card = UserCard.objects.create(tg_id=user.tg_id)
             user_card.save()
 
         user_card = UserCard.objects.get(tg_id=user.tg_id)
-        return render(request, 'user_card/card.html', {"user_card":user_card})
+
+        return render(request, 'user_card/card.html', {"user_card":user_card, "tg_id":user.tg_id})
 
     def post(self, request):
 

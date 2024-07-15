@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 import secrets
 from .models import TelegramUsers
 from django.utils import timezone
@@ -77,3 +77,39 @@ class SessionDebuger:
             print("")
             print("")
             return redirect("/")
+        
+
+class AccessCheckMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        path_exceptions = [
+            "/",
+            "/bot",
+            "/login/",
+            "/logout/",
+            "/auth_check/",
+            "/info/"
+        ]
+        
+        print(request.path)
+
+        if request.path in path_exceptions or "/admin" in request.path:
+            response = self.get_response(request)
+
+            return response
+        
+        if "session_id" in request.session and TelegramUsers.objects.filter(session_id=request.session["session_id"]).exists():
+            user = TelegramUsers.objects.get(session_id=request.session["session_id"])
+ 
+            if user.access != "1":
+                response = self.get_response(request)
+                return response
+            else:
+
+                info = f"ваша учетная запись {user.tg_id} ожидает подтверждения"
+                return render(request, 'info.html', {"info":info})
+        else:
+            response = self.get_response(request)
+            return response            
