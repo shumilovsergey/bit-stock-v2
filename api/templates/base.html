@@ -19,6 +19,16 @@
                     <pre>{{request.session.name}}</pre>
                 </button>
             </form>
+            <form action="" method="GET">
+                <button class="hover:bg-stone-300 h-10 w-40 items-center flex justify-center duration-500 text-lg">
+                    <pre>сделки</pre>
+                </button>
+            </form>
+            <form action="{% url 'api:product_list' %}" method="GET">
+                <button class="hover:bg-stone-300 h-10 w-40 items-center flex justify-center duration-500 text-lg">
+                    <pre>склад</pre>
+                </button>
+            </form>
         </div>
 
         <div class="flex w-80">

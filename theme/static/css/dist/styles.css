@@ -1020,6 +1020,11 @@ select {
   padding-bottom: 1rem;
 }
 
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
 .pb-2 {
   padding-bottom: 0.5rem;
 }
@@ -1068,6 +1073,14 @@ select {
   padding-top: 5px;
 }
 
+.pl-8 {
+  padding-left: 2rem;
+}
+
+.pl-7 {
+  padding-left: 1.75rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -1096,6 +1109,10 @@ select {
 
 .font-normal {
   font-weight: 400;
+}
+
+.lowercase {
+  text-transform: lowercase;
 }
 
 .leading-normal {
@@ -1139,6 +1156,11 @@ select {
 .hover\:bg-stone-300:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(214 211 209 / var(--tw-bg-opacity));
+}
+
+.hover\:px-3:hover {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .focus\:border-b-4:focus {

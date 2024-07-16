@@ -5,6 +5,9 @@ from django.http import JsonResponse
 from .models import TelegramUsers
 from .models import UserCard
 from .models import Shop
+from .models import Categories
+from .models import Brands
+from .models import Products
 
 from server.const import BOT_NAME
 from server.const import HOST_DNS
@@ -91,3 +94,19 @@ class AddBook(View):
 
         return render(request, 'user_card/add_book.html', {'add_book':add_book})
 
+# products
+class ProductList(View):
+    def get(self, request):
+        product_list = []
+        categories = Categories.objects.all()
+        for category in categories:
+            brands = category.brands_set.all()
+            for brand in brands:
+                products = brand.products_set.all()
+                for product in products:
+                    product_list.append(product)
+
+        return render(request, 'product/product_list.html', {'product_list':product_list})
+    
+    def post(self, request):
+        return redirect("/product_list/")
