@@ -7,7 +7,7 @@ bit-stock
 
 
 <div class="">
-    <table id="table" class="">
+    <table class="">
         <thead class="">
             <tr class="">
                 <th class="rounded-tl-2xl bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">категория</th>
@@ -17,19 +17,29 @@ bit-stock
             </tr>
         </thead>
 
-        <tbody class="">
+        <tbody id="tableBody" class="">
             <form action="" method="post">
                 {% csrf_token %}
                 <tr>
-                    <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">
-                        <input class=" h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="searchCategory" onkeyup="filterCategory()">
+                    <td class="bg-amber-50 min-w-64 border-b border-r border-stone-700 text-left px-2 py-4">
+                        <div class="flex justify-between">
+                            <div class="h-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('categoryInput')">x</div>
+                            <input class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" onkeyup="filterTable()">
+                        </div>
                     </td>
-                    <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">
-                        <input class=" h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="searchBrand" onkeyup="filterBrand()">
+                    <td class="bg-amber-50 min-w-64 border-b border-r border-stone-700 text-left px-2 py-4">
+                        <div class="flex justify-between">
+                            <div class="h-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('brandInput')">x</div>
+                            <input class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="brandInput" onkeyup="filterTable()">
+                        </div>    
                     </td>
-                    <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">
-                        <input class=" h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="searchProduct" onkeyup="filterProduct()">
+                    <td class="bg-amber-50 min-w-64 border-b border-r border-stone-700 text-left px-2 py-4">
+                        <div class="flex justify-between">
+                            <div class="h-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('productInput')">x</div>
+                            <input class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="productInput" onkeyup="filterTable()">
+                        </div>
                     </td>
+
                     <td class="bg-amber-50 border-b border-stone-700 text-left pl-7 w-40">
                         <button class="h-10 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md">добавить</button>
                     </td>
@@ -37,10 +47,10 @@ bit-stock
             </form>
             {% for product in product_list %}
             <tr class="">
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{product.brand.category.name}}</td>
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{product.brand.name}}</td>
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{product.name}}</td>
-                <td class="bg-amber-50 border-b border-stone-700 text-left px-8 py-4">{{product.amount}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('categoryInput', this)">{{product.brand.category.name}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('brandInput', this)">{{product.brand.name}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('productInput', this)">{{product.name}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border-b border-stone-700 text-left px-8 py-4">{{product.amount}}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -49,91 +59,42 @@ bit-stock
 </div>
 
 <script>
-    function filterCategory() {
-        let input = document.getElementById('searchCategory').value.toLowerCase();
-        let table = document.getElementById('table');
-        let rows = table.getElementsByTagName('tr');
+    function filterTable() {
+        var categoryInput = document.getElementById('categoryInput').value.toLowerCase();
+        var brandInput = document.getElementById('brandInput').value.toLowerCase();
+        var productInput = document.getElementById('productInput').value.toLowerCase();
+        var table = document.getElementById('tableBody');
+        var rows = table.getElementsByTagName('tr');
 
-        for (let i = 2; i < rows.length; i++) {
-            let row = rows[i];
-            let cells = row.getElementsByTagName('td');
-            let rowContainsInput = false;
+        for (var i = 1; i < rows.length; i++) {
+            var categoryCell = rows[i].getElementsByTagName('td')[0];
+            var brandCell = rows[i].getElementsByTagName('td')[1];
+            var productCell = rows[i].getElementsByTagName('td')[2];
 
-            for (let j = 0; j < 1; j++) {
-                let cell = rows[i].getElementsByTagName('td')[0];
-                if (cell) {
-                    let txtValue = cell.textContent || cell.innerText;
-                    if (txtValue.toLowerCase().indexOf(input) > -1) {
-                        rowContainsInput = true;
-                        break;
-                    }
+            if (categoryCell && brandCell && productCell) {
+                var categoryText = categoryCell.textContent || categoryCell.innerText;
+                var brandText = brandCell.textContent || brandCell.innerText;
+                var productText = productCell.textContent || productCell.innerText;
+
+                if (categoryText.toLowerCase().indexOf(categoryInput) > -1 &&
+                    brandText.toLowerCase().indexOf(brandInput) > -1 &&
+                    productText.toLowerCase().indexOf(productInput) > -1) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
                 }
-            }
-
-            if (rowContainsInput) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
             }
         }
     }
 
-    function filterBrand() {
-        let input = document.getElementById('searchBrand').value.toLowerCase();
-        let table = document.getElementById('table');
-        let rows = table.getElementsByTagName('tr');
-
-        for (let i = 2; i < rows.length; i++) {
-            let row = rows[i];
-            let cells = row.getElementsByTagName('td');
-            let rowContainsInput = false;
-
-            for (let j = 1; j < 2; j++) {
-                let cell = rows[i].getElementsByTagName('td')[0];
-                if (cell) {
-                    let txtValue = cell.textContent || cell.innerText;
-                    if (txtValue.toLowerCase().indexOf(input) > -1) {
-                        rowContainsInput = true;
-                        break;
-                    }
-                }
-            }
-
-            if (rowContainsInput) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        }
+    function setInput(inputId, cell) {
+            document.getElementById(inputId).value = cell.innerText;
+            filterTable();
     }
 
-    function filterProduct() {
-        let input = document.getElementById('searchProduct').value.toLowerCase();
-        let table = document.getElementById('table');
-        let rows = table.getElementsByTagName('tr');
-
-        for (let i = 2; i < rows.length; i++) {
-            let row = rows[i];
-            let cells = row.getElementsByTagName('td');
-            let rowContainsInput = false;
-
-            for (let j = 3; j < 4; j++) {
-                let cell = rows[i].getElementsByTagName('td')[0];
-                if (cell) {
-                    let txtValue = cell.textContent || cell.innerText;
-                    if (txtValue.toLowerCase().indexOf(input) > -1) {
-                        rowContainsInput = true;
-                        break;
-                    }
-                }
-            }
-
-            if (rowContainsInput) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        }
+    function clearInput(inputId) {
+        document.getElementById(inputId).value = '';
+        filterTable();
     }
 </script>
 
