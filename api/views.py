@@ -109,4 +109,16 @@ class ProductList(View):
         return render(request, 'product/product_list.html', {'product_list':product_list})
     
     def post(self, request):
+        category_input = request.POST["category"].lower()
+        brand_input = request.POST["brand"].lower()
+        product_input = request.POST["product"].lower()
+        category, created = Categories.objects.get_or_create(name=category_input)
+        brand, created = Brands.objects.get_or_create(name=brand_input, category=category)
+
+        if Products.objects.filter(name=product_input, brand=brand.id).exists():
+            info = "такая карточка товара уже существует! карточка товара должна быть уникальной - операция отменена!"
+            return render(request, 'info.html', {'info':info})
+        else:
+            product = Products.objects.create(name=product_input, brand=brand)
+            product.save()
         return redirect("/product_list/")

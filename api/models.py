@@ -59,18 +59,22 @@ class UserCard(models.Model):
 # products
 class Categories(models.Model):
     name = models.CharField("название категории", max_length=56, unique=True)
+    created = models.DateTimeField("дата регистрации", auto_now_add=True)
     def __str__(self):
         return self.name
     class Meta:
+        ordering = ['-created']
         verbose_name = "4. категория"
         verbose_name_plural = "4. категории"
 
 class Brands(models.Model):
     name = models.CharField("название бренда", max_length=56)
     category = models.ForeignKey(Categories, on_delete=models.PROTECT)
+    created = models.DateTimeField("дата регистрации", auto_now_add=True)
     def __str__(self):
         return f"{self.category} ~ {self.name}"
     class Meta:
+        ordering = ['-created']
         verbose_name = "5. бренд"
         verbose_name_plural = "5. бренды"
 
