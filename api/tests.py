@@ -13,36 +13,8 @@ from server.const import HOST_DNS
 class TestView(View):
     def get(self, request):
         result = []
-        return JsonResponse({'result': result})
+        return render(request, 'test.html')
     
-    # function filterCategory() {
-    #     let input = document.getElementById('searchInput').value.toLowerCase();
-    #     let table = document.getElementById('table');
-    #     let rows = table.getElementsByTagName('tr');
-
-    #     for (let i = 1; i < rows.length; i++) {
-    #         let row = rows[i];
-    #         let cells = row.getElementsByTagName('td');
-    #         let rowContainsInput = false;
-
-    #         for (let j = 0; j < cells.length; j++) {
-    #             let cell = cells[j];
-    #             if (cell) {
-    #                 let txtValue = cell.textContent || cell.innerText;
-    #                 if (txtValue.toLowerCase().indexOf(input) > -1) {
-    #                     rowContainsInput = true;
-    #                     break;
-    #                 }
-    #             }
-    #         }
-
-    #         if (rowContainsInput) {
-    #             row.style.display = "";
-    #         } else {
-    #             row.style.display = "none";
-    #         }
-    #     }
-    # }
 
 
 

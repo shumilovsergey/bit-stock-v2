@@ -1,6 +1,7 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+import json
 
 from .models import TelegramUsers
 from .models import UserCard
@@ -122,3 +123,18 @@ class ProductList(View):
             product = Products.objects.create(name=product_input, brand=brand)
             product.save()
         return redirect("/product_list/")
+    
+# deal
+
+class DealCreate(View):
+    def get(self, request):
+        return redirect("/")
+    
+    def post(self, request):
+        string = request.POST.get('product_ids')
+        product_id_list = json.loads(string)
+        if len(product_id_list) == 0:
+            return redirect("/")
+        
+
+        return JsonResponse({"ok":product_id_list})

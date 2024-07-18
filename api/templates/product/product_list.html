@@ -6,14 +6,23 @@ bit-stock
 {% load static %}
 
 
-<div class="">
-    <table class="">
+<div class="mb-32">
+    <table class="" id="table2"></table>
+
+    <div class="flex justify-end">
+        <div id="divSell" class="hidden">
+            <button id="sellButton" onclick="sellProducts()" class="h-10 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md">оформить</button>
+        </div>
+    </div>
+
+
+    <table id="table1" class="">
         <thead class="">
             <tr class="">
-                <th class="rounded-tl-2xl bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">категория</th>
+                <th class="bg-amber-100 rounded-tl-2xl border-b border-r border-stone-700 text-left px-8 py-4 font-normal">категория</th>
                 <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">бренд</th>
                 <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">товар</th>
-                <th class="rounded-tr-2xl bg-amber-100 border-b border-stone-700 text-left px-8 py-4 font-normal">количество</th>
+                <th class="bg-amber-100 rounded-tr-2xl border-b border-stone-700 text-left px-8 py-4 font-normal">количество</th>
             </tr>
         </thead>
 
@@ -46,11 +55,16 @@ bit-stock
                 </tr>
             </form>
             {% for product in product_list %}
-            <tr class="">
-                <td class="bg-amber-50 hover:bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('categoryInput', this)">{{product.brand.category.name}}</td>
-                <td class="bg-amber-50 hover:bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('brandInput', this)">{{product.brand.name}}</td>
-                <td class="bg-amber-50 hover:bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('productInput', this)">{{product.name}}</td>
-                <td class="bg-amber-50 hover:bg-amber-100 border-b border-stone-700 px-8 py-4 text-center">{{product.amount}}</td>
+            <tr data-id={{product.id}} class="">
+                <td class="bg-amber-50 hover:bg-amber-100 min-w-64 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('categoryInput', this)">{{product.brand.category.name}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 min-w-64 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('brandInput', this)">{{product.brand.name}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 min-w-64 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('productInput', this)">{{product.name}}</td>
+                <td class="bg-amber-50 border-b border-stone-700 px-8 py-4 w-40 text-center">
+                    <div class="flex justify-between">
+                        <div class="pt-[6px]">{{product.amount}}</div>
+                        <div class="h-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="moveToTable2(this)"">></div>
+                    </div>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -95,6 +109,85 @@ bit-stock
     function clearInput(inputId) {
         document.getElementById(inputId).value = '';
         filterTable();
+    }
+
+    function moveToTable2(button) {
+        const row = button.parentElement.parentElement.parentElement;
+        const clone = row.cloneNode(true);
+
+        const newButton = clone.querySelector('div[onclick]');
+        newButton.setAttribute('onclick', 'moveToTable1(this)');
+        newButton.innerHTML = 'x';
+        document.getElementById('table2').appendChild(clone);
+        row.classList.add('hidden');
+        document.getElementById('divSell').classList.remove('hidden');
+    }
+
+    function moveToTable1(button) {
+        const row = button.parentElement.parentElement.parentElement;
+        const id = row.getAttribute('data-id');
+
+        const table1Rows = document.querySelectorAll('#table1 tr');
+        table1Rows.forEach(table1Row => {
+            if (table1Row.getAttribute('data-id') === id) {
+                table1Row.classList.remove('hidden');
+            }
+        });
+
+        row.parentElement.removeChild(row);
+
+        const table2 = document.getElementById('table2');
+        if (table2.rows.length < 1) {
+            document.getElementById('divSell').classList.add('hidden');
+        }
+    }
+
+    function sellProducts() {
+        const table2Rows = document.querySelectorAll('#table2 tr[data-id]');
+        const productIds = [];
+        table2Rows.forEach(row => {
+            productIds.push(row.getAttribute('data-id'));
+        });
+
+        // Create a form to submit the POST request
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/deal_create/';
+        
+        // Add CSRF token
+        const csrftoken = getCookie('csrftoken');
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = csrftoken;
+        form.appendChild(csrfInput);
+
+        // Create an input to hold the product IDs
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'product_ids';
+        input.value = JSON.stringify(productIds);
+        
+        form.appendChild(input);
+        document.body.appendChild(form);
+        
+        // Submit the form
+        form.submit();
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
     }
 
 </script>

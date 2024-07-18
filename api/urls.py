@@ -7,7 +7,7 @@ from .views import AuthCheck
 from .views import Card
 from .views import AddBook
 from .views import ProductList
-
+from .views import DealCreate
 
 app_name = 'api'
 urlpatterns = [
@@ -22,4 +22,9 @@ urlpatterns = [
     path('add_book/', AddBook.as_view(), name='add_book'),
     # product_list
     path('product_list/', ProductList.as_view(), name='product_list'),
+    # deal_list
+    # deal_create
+    path('deal_create/', DealCreate.as_view(), name='deal_create'),
+    # deal_submit
+
 ]

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 
 # users
 class TelegramUsers(models.Model):
@@ -90,7 +91,31 @@ class Products(models.Model):
         verbose_name = "6. товар"
         verbose_name_plural = "6. товары"
 
-# operations
+# deals
 
+class Deals(models.Model):
+    TYPE_LIST = [('1', '+'), ('2', '-')]
+    created = models.DateTimeField("дата создания", auto_now_add=True)
+    #
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+    #
+    tg_id = models.CharField("телеграм id", max_length=56)
+    tg_add = models.CharField("телеграм add", max_length=56)
+    user_name = models.CharField("имя сотрудника", max_length=56)
+    #
+    category = models.CharField("категория", max_length=56)
+    brand = models.CharField("бренд", max_length=56)
+    product = models.CharField("продукт", max_length=56)
+    amount = models.IntegerField("количество", validators=[MinValueValidator(1)])
+    prise = models.IntegerField("цена за штуку", validators=[MinValueValidator(0)])
+    tota_prise = models.IntegerField("итоговая цена", validators=[MinValueValidator(0)])
+    type = models.CharField("доход // расход", max_length=1, choices=TYPE_LIST)
+    def __str__(self):
+        return f"{self.time} ~ {self.date} ~ {self.product} ~ {self.user_name} ~ {self.type}{self.tota_prise}"
+    class Meta:
+        ordering = ['-created']
+        verbose_name = "7. сделка"
+        verbose_name_plural = "7. сделки"
 # logs
 

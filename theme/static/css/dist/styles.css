@@ -832,6 +832,10 @@ select {
   margin-bottom: 2.5rem;
 }
 
+.mb-32 {
+  margin-bottom: 8rem;
+}
+
 .mt-10 {
   margin-top: 2.5rem;
 }
@@ -1087,6 +1091,10 @@ select {
 
 .pt-\[5px\] {
   padding-top: 5px;
+}
+
+.pt-\[6px\] {
+  padding-top: 6px;
 }
 
 .text-left {
