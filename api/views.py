@@ -136,5 +136,22 @@ class DealCreate(View):
         if len(product_id_list) == 0:
             return redirect("/")
         
+        products_choisen= []
+        for product_id in product_id_list:
+            if not Products.objects.filter(id=product_id).exists():
+                info = "Сделка не может быть создана, одного из продуктов нет на складе"
+                return render(request, 'info.html', {'info':info})
+            else:
+                product = Products.objects.get(id=product_id)
+                products_choisen.append(product)
 
-        return JsonResponse({"ok":product_id_list})
+        return render(request, 'deal/deal_create.html', {"products_choisen":products_choisen})
+    
+class DealSubmit(View):
+    def get(self, request):
+        return redirect("/")
+    
+    def post(self, request):
+        r = request.POST
+        print(r)
+        return JsonResponse({"qq":"qq"})

@@ -5,4 +5,83 @@ bit-stock
 {% block content %}
 {% load static %}
 
+
+<form action="{% url 'api:deal_submit' %}" method="post">
+    {% csrf_token %}
+
+        <div class="mb-10">
+            <pre>детали сделки:</pre>
+        </div>
+        
+        <table class="">
+            <thead class="">
+                <tr class="">
+                    <th class="bg-amber-100 rounded-tl-2xl border-b border-r border-stone-700 text-left px-8 py-4 font-normal">категория</th>
+                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">бренд</th>
+                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">товар</th>
+                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">складе</th>
+                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">кол-во</th>
+                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">цена за штуку</th>
+                    <th class="bg-amber-100 rounded-tr-2xl border-b border-stone-700 text-left px-8 py-4 font-normal">итог</th>
+                </tr>
+            </thead>
+        <tbody>
+            {% for product in products_choisen %}
+            <tr>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{product.brand.category.name}}</td>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{product.brand.name}}</td>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{product.name}}</td>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-center px-8 py-4">{{product.amount}}</td>
+
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-center">
+                    <input type="hidden" name="id" value="{{ product.id }}">
+                    <input type="number" id="amount_{{product.id}}" name="amount" min="0" oninput="updateTotalPrice()"  required class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" onkeyup="filterTable()">
+                </td>
+                <td class="bg-amber-50 border-b border-r border-stone-700 text-center">
+                    <input type="number" id="product_price_{{product.id}}" name="product_price" oninput="updateTotalPrice()" min="0" class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" onkeyup="filterTable()" required>
+                </td>
+                <td class="bg-amber-50 border-b border-stone-700 text-center px-8 py-4">итог</td>
+            </td>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-10">
+        <select id="type" name="type" required class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" >
+            <option value="" disabled selected>ТИП СДЕЛКИ</option>
+            <option value="+">ПРОДАЮ</option>
+            <option value="-">ПОКУПАЮ</option>
+        </select>
+    </div>
+
+
+
+    <div class="flex justify-end mr-12 mt-10">
+        <div>
+            <div id="total_price_display" class="bg-amber-50 border mt-3 w-48 border-stone-700 text-center px-8 py-4 rounded-2xl">ИТОГО: 0</div>
+            <input type="hidden" id="total_price" name="total_price" value="0">
+            <div class="flex justify-end mt-3">
+                <button type="submit" class="h-10 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md">провести</button>
+            <div></div>
+        </div>
+    </div>
+</form>
+
+<script>
+    function updateTotalPrice() {
+        const priceInputs = document.querySelectorAll('input[name="product_price"]');
+        const amountInputs = document.querySelectorAll('input[name="amount"]');
+        let total = 0;
+
+        for (let i = 0; i < priceInputs.length; i++) {
+            const price = parseFloat(priceInputs[i].value) || 0; 
+            const amount = parseInt(amountInputs[i].value) || 0; 
+            total += price * amount;
+        }
+
+        document.getElementById('total_price').value = total;
+        document.getElementById('total_price_display').textContent = `ИТОГО: ${total.toFixed(2)}`;
+    }
+</script>
+
 {% endblock %}
