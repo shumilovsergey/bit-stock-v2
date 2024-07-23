@@ -6,7 +6,7 @@ bit-stock
 {% load static %}
 
 
-<form action="{% url 'api:deal_submit' %}" method="post">
+<form action="{% url 'api:deal_list' %}" method="post">
     {% csrf_token %}
 
         <div class="mb-10">

@@ -9,6 +9,7 @@ from .models import Shop
 from .models import Categories
 from .models import Brands
 from .models import Products
+from .models import Deals
 
 from server.const import BOT_NAME
 from server.const import HOST_DNS
@@ -81,7 +82,7 @@ class Card(View):
         user_card.tg_add =request.POST["tg_add"].replace("@", "")
         user_card.save()
 
-        return redirect("/user_card/")
+        return redirect("/")
         
 # add_book
 class AddBook(View):
@@ -147,11 +148,65 @@ class DealCreate(View):
 
         return render(request, 'deal/deal_create.html', {"products_choisen":products_choisen})
     
-class DealSubmit(View):
+class DealList(View):
     def get(self, request):
-        return redirect("/")
+    
+        session_id = request.session["session_id"]        
+        user = TelegramUsers.objects.get(session_id=session_id)
+        
+        if not UserCard.objects.filter(tg_id=user.tg_id).exists():
+            info = "нужно заполнить карточку сотрудника!"
+            return render(request, 'info.html', {'info':info})
+
+        # user_card = UserCard.objects.get(tg_id=user.tg_id)
+        return JsonResponse({"qq":"qq"})
     
     def post(self, request):
-        r = request.POST
-        print(r)
+        # lists
+        ids = request.POST.getlist('id')
+        product_prices = request.POST.getlist('product_price')
+        amounts = request.POST.getlist('amount')
+
+        # single
+        type = request.POST["type"]
+        session_id = request.session["session_id"]        
+        user = TelegramUsers.objects.get(session_id=session_id)
+
+        if not UserCard.objects.filter(tg_id=user.tg_id).exists():
+            info = "нужно заполнить карточку сотрудника!"
+            return render(request, 'info.html', {'info':info})
+
+        user_card = UserCard.objects.get(tg_id=user.tg_id)
+        if user_card.tg_add == "empty":
+            info = "нужно заполнить карточку сотрудника!"
+            return render(request, 'info.html', {'info':info})
+
+        tg_id = user_card.tg_id
+        tg_add = user_card.tg_add
+        user_name = user_card.second_name
+        shop = user_card.shop.name
+
+        # loop
+        for id, product_price, amount in zip(ids, product_prices, amounts):
+            product = Products.objects.get(id=id)
+            brand = product.brand.name
+            category = product.brand.category.name
+            total_price = int(amount) * int(product_price)
+
+            deal = Deals.objects.create(
+                tg_id = tg_id,
+                tg_add = tg_add,
+                user_name = user_name,
+                shop = shop,
+                category = category,
+                brand = brand,
+                product = product.name,
+                amount = int(amount),
+                product_price = int(product_price),
+                tota_price = int(total_price),
+                type = type,
+            )
+
+            deal.save()
         return JsonResponse({"qq":"qq"})
+    

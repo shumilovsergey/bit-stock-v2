@@ -103,16 +103,17 @@ class Deals(models.Model):
     tg_id = models.CharField("телеграм id", max_length=56)
     tg_add = models.CharField("телеграм add", max_length=56)
     user_name = models.CharField("имя сотрудника", max_length=56)
+    shop = models.CharField("магазин", max_length=56)
     #
     category = models.CharField("категория", max_length=56)
     brand = models.CharField("бренд", max_length=56)
     product = models.CharField("продукт", max_length=56)
-    amount = models.IntegerField("количество", validators=[MinValueValidator(1)])
-    prise = models.IntegerField("цена за штуку", validators=[MinValueValidator(0)])
-    tota_prise = models.IntegerField("итоговая цена", validators=[MinValueValidator(0)])
+    amount = models.IntegerField("количество")
+    product_price = models.IntegerField("цена за штуку")
+    tota_price = models.IntegerField("итоговая цена")
     type = models.CharField("доход // расход", max_length=1, choices=TYPE_LIST)
     def __str__(self):
-        return f"{self.time} ~ {self.date} ~ {self.product} ~ {self.user_name} ~ {self.type}{self.tota_prise}"
+        return f"{self.time} ~ {self.date} ~ {self.product} ~ {self.user_name} ~ {self.type}{self.tota_price}"
     class Meta:
         ordering = ['-created']
         verbose_name = "7. сделка"

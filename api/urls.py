@@ -8,7 +8,7 @@ from .views import Card
 from .views import AddBook
 from .views import ProductList
 from .views import DealCreate
-from .views import DealSubmit
+from .views import DealList
 
 app_name = 'api'
 urlpatterns = [
@@ -23,9 +23,7 @@ urlpatterns = [
     path('add_book/', AddBook.as_view(), name='add_book'),
     # product_list
     path('product_list/', ProductList.as_view(), name='product_list'),
-    # deal_list
-    # deal_create
+    # deal
     path('deal_create/', DealCreate.as_view(), name='deal_create'),
-    # deal_submit
-    path('deal_submit/', DealSubmit.as_view(), name='deal_submit'),
+    path('deal_list/', DealList.as_view(), name='deal_list'),
 ]
