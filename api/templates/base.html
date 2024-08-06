@@ -19,7 +19,7 @@
                     <pre>{{request.session.name}}</pre>
                 </button>
             </form>
-            <form action="" method="GET">
+            <form action="{% url 'api:deal_list' %}" method="GET">
                 <button class="hover:bg-stone-300 h-10 w-40 items-center flex justify-center duration-500 text-lg">
                     <pre>сделки</pre>
                 </button>
@@ -47,7 +47,7 @@
 
     {% endif %}
 
-    <div class="px-32 mt-32 font-extralight text-lg">
+    <div class="mt-32 font-extralight text-lg">
         {% block content %}{% endblock %}
     </div>
 

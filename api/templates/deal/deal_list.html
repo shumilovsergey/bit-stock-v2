@@ -5,4 +5,200 @@ bit-stock
 {% block content %}
 {% load static %}
 
+
+<div>
+    <table class="mb-32 ml-4">
+        <thead class="">
+            <tr>
+                <td>
+                    <div id="type_clear" class="top-[120px] absolute">
+                        <div class="flex justify-center">
+                            <div id="type_filter" class="hidden h-10 w-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('type_input')">x</div>
+                            <input class="hidden" type="text" id="type_input" onkeyup="filterTable()">
+                        </div>   
+                    </div>
+                </td>
+                <td>
+                    <div class="top-[120px] absolute">
+                        <div class="flex justify-center">
+                            <div id="date_filter" class="hidden h-10 w-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('date_input')">x</div>
+                            <input class="hidden" type="text" id="date_input" onkeyup="filterTable()">
+                        </div>   
+                    </div>
+                </td>
+                <td>
+                    <div class="top-[120px] absolute">
+                        <div class="flex justify-center">
+                            <div id="time_filter" class="hidden h-10 w-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('time_input')">x</div>
+                            <input class="hidden" type="text" id="time_input" onkeyup="filterTable()">
+                        </div>  
+                    </div>
+                </td>
+                <td>
+                    <div class="top-[120px] absolute">
+                        <div class="flex justify-center">
+                            <div id="product_filter" class="hidden h-10 w-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('product_input')">x</div>
+                            <input class="hidden" type="text" id="product_input" onkeyup="filterTable()">
+                        </div>  
+                    </div>
+                </td>
+                <td></td>
+                <td>
+                    <div class="top-[120px] absolute">
+                        <div class="flex justify-center">
+                            <div id="user_name_filter" class="hidden h-10 w-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('user_name_input')">x</div>
+                            <input class="hidden" type="text" id="user_name_input" onkeyup="filterTable()">
+                        </div>   
+                    </div>
+                </td>
+                <td>
+                    <div class="top-[120px] absolute">
+                        <div class="flex justify-center">
+                            <div id="shop_filter" class="hidden h-10 w-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('shop_input')">x</div>
+                            <input class="hidden" type="text" id="shop_input" onkeyup="filterTable()">
+                        </div>  
+                    </div>
+                </td>
+
+                <td></td>
+
+                <td></td>
+
+                <td>
+                    <div class="top-[120px] absolute">
+                        <div class="flex justify-center">
+                            <div id="category_filter" class="hidden h-10 w-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('category_input')">x</div>
+                            <input class="hidden" type="text" id="category_input" onkeyup="filterTable()">
+                        </div>                            
+                    </div>
+                </td>
+                <td>
+                    <div class="top-[120px] absolute">
+                        <div class="flex justify-center">
+                            <div id="brand_filter" class="hidden h-10 w-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('brand_input')">x</div>
+                            <input class="hidden" type="text" id="brand_input" onkeyup="filterTable()">
+                        </div>  
+                    </div>
+                </td>
+                <td>
+                    <div class="top-[120px] absolute">
+                        <div class="flex justify-center">
+                            <div id="telegram_filter" class="hidden h-10 w-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('telegram_input')">x</div>
+                            <input class="hidden" type="text" id="telegram_input" onkeyup="filterTable()">
+                        </div>    
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="">
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">тип</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">дата</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">время</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">товар</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">за сделку</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">сотрудник</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">магазин</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">кол во</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">за штуку</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">категория</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">бренд</td>
+                <td class="bg-amber-100 border font-normal border-stone-700 text-left px-4">телеграм</td>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            {% for deal in deal_list %}
+            <tr>
+                <td class="bg-amber-50 hover:bg-amber-100 border font-extralight border-stone-700 text-left px-4" onclick="setInput('type_input', this)" >{{deal.type}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border font-extralight border-stone-700 text-left px-4" onclick="setInput('date_input', this)" >{{deal.date|date:"d.m.Y"}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border font-extralight border-stone-700 text-left px-4" onclick="setInput('time_input', this)" >{{deal.time|time:"H:i"}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border font-extralight border-stone-700 text-left px-4" onclick="setInput('product_input', this)" >{{deal.product}}</td>
+                <td class="bg-amber-50 border font-extralight border-stone-700 text-left px-4">{{deal.type}}{{deal.tota_price}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border font-extralight border-stone-700 text-left px-4" onclick="setInput('user_name_input', this)" >{{deal.user_name}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border font-extralight border-stone-700 text-left px-4" onclick="setInput('shop_input', this)" >{{deal.shop}}</td>
+                <td class="bg-amber-50 border font-extralight border-stone-700 text-left px-4">{{deal.amount}}</td>
+                <td class="bg-amber-50 border font-extralight border-stone-700 text-left px-4">{{deal.product_price}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border font-extralight border-stone-700 text-left px-4" onclick="setInput('category_input', this)" >{{deal.category}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border font-extralight border-stone-700 text-left px-4" onclick="setInput('brand_input', this)" >{{deal.brand}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 border font-extralight border-stone-700 text-left px-4" onclick="setInput('telegram_input', this)" >{{deal.tg_add}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function filterTable() {
+        var typeInput = document.getElementById('type_input').value.toLowerCase();
+        var dateInput = document.getElementById('date_input').value.toLowerCase();
+        var timeInput = document.getElementById('time_input').value.toLowerCase();
+        var productInput = document.getElementById('product_input').value.toLowerCase();
+        var userNameInput = document.getElementById('user_name_input').value.toLowerCase();
+        var shopInput = document.getElementById('shop_input').value.toLowerCase();
+        var categoryInput = document.getElementById('category_input').value.toLowerCase();
+        var brandInput = document.getElementById('brand_input').value.toLowerCase();
+        var telegramInput = document.getElementById('telegram_input').value.toLowerCase();
+        
+        //
+        var table = document.getElementById('tableBody');
+        var rows = table.getElementsByTagName('tr');
+
+        for (var i = 0; i < rows.length; i++) {
+            var typeCell = rows[i].getElementsByTagName('td')[0];
+            var dateCell = rows[i].getElementsByTagName('td')[1];
+            var timeCell = rows[i].getElementsByTagName('td')[2];
+            var productCell = rows[i].getElementsByTagName('td')[3];
+            var userNameCell = rows[i].getElementsByTagName('td')[5];
+            var shopCell = rows[i].getElementsByTagName('td')[6];
+            var categoryCell = rows[i].getElementsByTagName('td')[9];
+            var brandCell = rows[i].getElementsByTagName('td')[10];
+            var telegramCell = rows[i].getElementsByTagName('td')[11];
+
+            if (typeCell && dateCell && timeCell && productCell && userNameCell && shopCell && categoryCell && brandCell && telegramCell) {
+                var typeText = typeCell.textContent || typeCell.innerText;
+                var dateText = dateCell.textContent || dateCell.innerText;
+                var timeText = timeCell.textContent || timeCell.innerText;
+                var productText = productCell.textContent || productCell.innerText;
+                var userNameText = userNameCell.textContent || userNameCell.innerText;
+                var shopText = shopCell.textContent || shopCell.innerText;
+                var categoryText = categoryCell.textContent || categoryCell.innerText;
+                var brandText = brandCell.textContent || brandCell.innerText;
+                var telegramText = telegramCell.textContent || telegramCell.innerText;
+
+                if (typeText.toLowerCase().indexOf(typeInput) > -1 &&
+                    dateText.toLowerCase().indexOf(dateInput) > -1 &&
+                    timeText.toLowerCase().indexOf(timeInput) > -1 &&
+                    productText.toLowerCase().indexOf(productInput) > -1 &&
+                    userNameText.toLowerCase().indexOf(userNameInput) > -1 &&
+                    shopText.toLowerCase().indexOf(shopInput) > -1 &&
+                    categoryText.toLowerCase().indexOf(categoryInput) > -1 &&
+                    brandText.toLowerCase().indexOf(brandInput) > -1 &&
+                    telegramText.toLowerCase().indexOf(telegramInput) > -1) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+    }
+
+    function setInput(inputId, cell) {
+        document.getElementById(inputId).value = cell.innerText;
+        var baseWord = inputId.replace('_input', '');
+        var filterId = baseWord + '_filter';
+        document.getElementById(filterId).classList.remove('hidden');
+        //
+        filterTable();
+    }
+
+    function clearInput(inputId) {
+        document.getElementById(inputId).value = '';
+        var baseWord = inputId.replace('_input', '');
+        var filterId = baseWord + '_filter';
+        document.getElementById(filterId).classList.add('hidden');
+        //
+        filterTable();
+    }
+
+</script>
+
 {% endblock %}

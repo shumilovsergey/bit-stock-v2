@@ -150,7 +150,7 @@ class DealCreate(View):
     
 class DealList(View):
     def get(self, request):
-    
+        deal_list = []
         session_id = request.session["session_id"]        
         user = TelegramUsers.objects.get(session_id=session_id)
         
@@ -158,8 +158,14 @@ class DealList(View):
             info = "нужно заполнить карточку сотрудника!"
             return render(request, 'info.html', {'info':info})
 
-        # user_card = UserCard.objects.get(tg_id=user.tg_id)
-        return JsonResponse({"qq":"qq"})
+        user_card = UserCard.objects.get(tg_id=user.tg_id)
+        if user.access != 3:
+            shop = user_card.shop
+            deal_list = Deals.objects.filter(shop=shop)
+        else:
+            deal_list = Deals.objects.all()
+
+        return render(request, 'deal/deal_list.html', {'deal_list':deal_list})
     
     def post(self, request):
         # lists
@@ -206,7 +212,6 @@ class DealList(View):
                 tota_price = int(total_price),
                 type = type,
             )
-
             deal.save()
-        return JsonResponse({"qq":"qq"})
+        return redirect("/deal_list/")
     

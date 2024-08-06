@@ -6,7 +6,7 @@ bit-stock
 {% load static %}
 
 
-<form action="{% url 'api:deal_list' %}" method="post">
+<form class="px-32" action="{% url 'api:deal_list' %}" method="post">
     {% csrf_token %}
 
         <div class="mb-10">
@@ -35,10 +35,10 @@ bit-stock
 
                 <td class="bg-amber-50 border-b border-r border-stone-700 text-center">
                     <input type="hidden" name="id" value="{{ product.id }}">
-                    <input type="number" id="amount_{{product.id}}" name="amount" min="0" oninput="updateTotalPrice()"  required class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" onkeyup="filterTable()">
+                    <input type="number" id="amount_{{product.id}}" name="amount" min="0" oninput="updateTotalPrice()"  required class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" required>
                 </td>
                 <td class="bg-amber-50 border-b border-r border-stone-700 text-center">
-                    <input type="number" id="product_price_{{product.id}}" name="product_price" oninput="updateTotalPrice()" min="0" class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" onkeyup="filterTable()" required>
+                    <input type="number" id="product_price_{{product.id}}" name="product_price" oninput="updateTotalPrice()" min="0" class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" required>
                 </td>
                 <td class="bg-amber-50 border-b border-stone-700 text-center px-8 py-4">итог</td>
             </td>

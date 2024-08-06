@@ -5,7 +5,7 @@ bit-stock
 {% block content %}
 {% load static %}
 
-<div class="shadow-md border-stone-700 w-[700px] border rounded-2xl bg-amber-50 pl-10 pr-10 pt-3">
+<div class="px-32 shadow-md border-stone-700 w-[700px] border rounded-2xl bg-amber-50 pl-10 pr-10 pt-3">
     <pre class="">карточка пользователя {{tg_id}}:</pre>
 
     <form class="pt-10" method="post" action="{% url 'api:user_card' %}" >

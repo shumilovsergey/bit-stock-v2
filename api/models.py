@@ -17,7 +17,7 @@ class TelegramUsers(models.Model):
     created = models.DateTimeField("создан", auto_now_add=True)
     access = models.CharField(max_length=1, choices=ACCESS_LIST, default=1)
     def __str__(self):
-        return f"{self.tg_id} ~ {self.name} ~ {self.access}"
+        return f"{self.tg_id} __ {self.name} __ {self.access}"
     class Meta:
         ordering = ['-created']
         verbose_name = "1. пользователь Телеграм"
@@ -73,7 +73,7 @@ class Brands(models.Model):
     category = models.ForeignKey(Categories, on_delete=models.PROTECT)
     created = models.DateTimeField("дата регистрации", auto_now_add=True)
     def __str__(self):
-        return f"{self.category} ~ {self.name}"
+        return f"{self.category} __ {self.name}"
     class Meta:
         ordering = ['-created']
         verbose_name = "5. бренд"
@@ -85,7 +85,7 @@ class Products(models.Model):
     amount = models.IntegerField("количество товара", default=0)
     created = models.DateTimeField("дата регистрации", auto_now_add=True)
     def __str__(self):
-        return f"{self.brand} ~ {self.name}"
+        return f"{self.brand} __ {self.name}"
     class Meta:
         ordering = ['-created']
         verbose_name = "6. товар"
@@ -113,7 +113,7 @@ class Deals(models.Model):
     tota_price = models.IntegerField("итоговая цена")
     type = models.CharField("доход // расход", max_length=1, choices=TYPE_LIST)
     def __str__(self):
-        return f"{self.time} ~ {self.date} ~ {self.product} ~ {self.user_name} ~ {self.type}{self.tota_price}"
+        return str(self.time.hour) +":"+ str(self.time.minute) +" __ "+ str(self.date) +" __ "+ str(self.product) +" __ "+ str(self.user_name) +" __ "+ str(self.type) +" __ "+ str(self.tota_price)
     class Meta:
         ordering = ['-created']
         verbose_name = "7. сделка"
