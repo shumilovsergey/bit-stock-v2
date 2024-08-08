@@ -6,41 +6,42 @@ bit-stock
 {% load static %}
 
 
-<form class="px-32" action="{% url 'api:deal_list' %}" method="post">
+<form id="dealForm" class="px-32" action="{% url 'api:deal_list' %}" method="post">
     {% csrf_token %}
 
         <div class="mb-10">
             <pre>детали сделки:</pre>
+            <p class="absolute" id="errorMessage" style="color: red;"></p>
         </div>
         
         <table class="">
             <thead class="">
                 <tr class="">
-                    <th class="bg-amber-100 rounded-tl-2xl border-b border-r border-stone-700 text-left px-8 py-4 font-normal">категория</th>
-                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">бренд</th>
-                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">товар</th>
-                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">складе</th>
-                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">кол-во</th>
-                    <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">цена за штуку</th>
-                    <th class="bg-amber-100 rounded-tr-2xl border-b border-stone-700 text-left px-8 py-4 font-normal">итог</th>
+                    <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">категория</th>
+                    <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">бренд</th>
+                    <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">товар</th>
+                    <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">складе</th>
+                    <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">кол-во</th>
+                    <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">цена за штуку</th>
+                    <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">итог</th>
                 </tr>
             </thead>
         <tbody>
             {% for product in products_choisen %}
             <tr>
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{product.brand.category.name}}</td>
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{product.brand.name}}</td>
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-left px-8 py-4">{{product.name}}</td>
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-center px-8 py-4">{{product.amount}}</td>
+                <td class="bg-amber-50 border border-stone-700 text-left px-8 py-4">{{product.brand.category.name}}</td>
+                <td class="bg-amber-50 border border-stone-700 text-left px-8 py-4">{{product.brand.name}}</td>
+                <td class="bg-amber-50 border border-stone-700 text-left px-8 py-4">{{product.name}}</td>
+                <td class="bg-amber-50 border border-stone-700 text-center px-8 py-4">{{product.amount}}</td>
 
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-center">
+                <td class="bg-amber-50 border border-stone-700 text-center">
                     <input type="hidden" name="id" value="{{ product.id }}">
-                    <input type="number" id="amount_{{product.id}}" name="amount" min="0" oninput="updateTotalPrice()"  required class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" required>
+                    <input type="number" id="amount_{{product.id}}" value="1" name="amount" min="1" oninput="updateTotalPrice()"  required class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" required>
                 </td>
-                <td class="bg-amber-50 border-b border-r border-stone-700 text-center">
-                    <input type="number" id="product_price_{{product.id}}" name="product_price" oninput="updateTotalPrice()" min="0" class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" required>
+                <td class="bg-amber-50 border border-stone-700 text-center">
+                    <input type="number" id="product_price_{{product.id}}" name="product_price" oninput="updateTotalPrice()" min="1" class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" required>
                 </td>
-                <td class="bg-amber-50 border-b border-stone-700 text-center px-8 py-4">итог</td>
+                <td class="bg-amber-50 border border-stone-700 text-center px-8 py-4">итог</td>
             </td>
             {% endfor %}
         </tbody>
@@ -67,7 +68,39 @@ bit-stock
     </div>
 </form>
 
+
+
 <script>
+    document.getElementById('dealForm').addEventListener('submit', function(event) {
+        event.preventDefault(); 
+
+        const transactionType = document.getElementById('type').value;
+        const amountInputs = document.querySelectorAll('input[name="amount"]');
+        const errorMessageElement = document.getElementById('errorMessage');
+        let isValid = true;
+
+        errorMessageElement.textContent = '';
+
+        if (transactionType === '+') {
+            amountInputs.forEach(function(input) {
+                const availableAmount = parseInt(input.closest('tr').querySelector('td:nth-child(4)').textContent);
+                const userAmount = parseInt(input.value) || 0;
+
+                if (userAmount > availableAmount) {
+                    isValid = false;
+                    errorMessageElement.textContent = 'количество товара не может превышать количество на складе';
+                    input.classList.add('border-red-500'); 
+                } else {
+                    input.classList.remove('border-red-500');
+                }
+            });
+        }
+
+        if (isValid) {
+            this.submit();
+        }
+    });
+
     function updateTotalPrice() {
         const priceInputs = document.querySelectorAll('input[name="product_price"]');
         const amountInputs = document.querySelectorAll('input[name="amount"]');
@@ -82,6 +115,7 @@ bit-stock
         document.getElementById('total_price').value = total;
         document.getElementById('total_price_display').textContent = `ИТОГО: ${total.toFixed(2)}`;
     }
+
 </script>
 
 {% endblock %}

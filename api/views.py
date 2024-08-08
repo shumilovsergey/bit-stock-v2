@@ -100,14 +100,21 @@ class AddBook(View):
 class ProductList(View):
     def get(self, request):
         product_list = []
+        exist_lis = []
+        unexist_list = []
+
         categories = Categories.objects.all()
         for category in categories:
             brands = category.brands_set.all()
             for brand in brands:
                 products = brand.products_set.all()
                 for product in products:
-                    product_list.append(product)
+                    if product.amount > 0:
+                        exist_lis.append(product)
+                    else:
+                        unexist_list.append(product)
 
+        product_list = exist_lis + unexist_list
         return render(request, 'product/product_list.html', {'product_list':product_list})
     
     def post(self, request):
@@ -195,6 +202,13 @@ class DealList(View):
         # loop
         for id, product_price, amount in zip(ids, product_prices, amounts):
             product = Products.objects.get(id=id)
+
+            if type == "-":
+                product.amount = product.amount + int(amount)
+            elif type == "+":
+                product.amount = product.amount - int(amount)
+            product.save()
+
             brand = product.brand.name
             category = product.brand.category.name
             total_price = int(amount) * int(product_price)

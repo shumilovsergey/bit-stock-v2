@@ -19,10 +19,10 @@ bit-stock
     <table id="table1" class="">
         <thead class="">
             <tr class="">
-                <th class="bg-amber-100 rounded-tl-2xl border-b border-r border-stone-700 text-left px-8 py-4 font-normal">категория</th>
-                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">бренд</th>
-                <th class="bg-amber-100 border-b border-r border-stone-700 text-left px-8 py-4 font-normal">товар</th>
-                <th class="bg-amber-100 rounded-tr-2xl border-b border-stone-700 text-left px-8 py-4 font-normal">количество</th>
+                <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">категория</th>
+                <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">бренд</th>
+                <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">товар</th>
+                <th class="bg-amber-100 border border-stone-700 text-left px-8 py-4 font-normal">количество</th>
             </tr>
         </thead>
 
@@ -30,36 +30,36 @@ bit-stock
             <form action="{% url 'api:product_list' %}" method="post">
                 {% csrf_token %}
                 <tr>
-                    <td class="bg-amber-50 min-w-64 border-b border-r border-stone-700 text-left px-2 py-4">
+                    <td class="bg-amber-50 min-w-64 border border-stone-700 text-left px-2 py-4">
                         <div class="flex justify-between">
                             <div class="h-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('categoryInput')">x</div>
                             <input name="category" class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="categoryInput" onkeyup="filterTable()" required>
                         </div>
                     </td>
-                    <td class="bg-amber-50 min-w-64 border-b border-r border-stone-700 text-left px-2 py-4">
+                    <td class="bg-amber-50 min-w-64 border border-stone-700 text-left px-2 py-4">
                         <div class="flex justify-between">
                             <div class="h-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('brandInput')">x</div>
                             <input name="brand" class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="brandInput" onkeyup="filterTable()" required>
                         </div>    
                     </td>
-                    <td class="bg-amber-50 min-w-64 border-b border-r border-stone-700 text-left px-2 py-4">
+                    <td class="bg-amber-50 min-w-64 border border-stone-700 text-left px-2 py-4">
                         <div class="flex justify-between">
                             <div class="h-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="clearInput('productInput')">x</div>
                             <input name="product" class="w-48 h-10 shadow-md border-b-2 border-stone-700 rounded-xl focus:ring-stone-700 focus:border-b-4 focus:border-stone-700" type="text" id="productInput" onkeyup="filterTable()" required>
                         </div>
                     </td>
 
-                    <td class="bg-amber-50 border-b border-stone-700 text-left pl-7 w-40">
+                    <td class="bg-amber-50 border border-stone-700 text-left pl-7 w-40">
                         <button id="submitButton" class="h-10 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md">создать</button>
                     </td>
                 </tr>
             </form>
             {% for product in product_list %}
             <tr data-id={{product.id}} class="">
-                <td class="bg-amber-50 hover:bg-amber-100 min-w-64 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('categoryInput', this)">{{product.brand.category.name}}</td>
-                <td class="bg-amber-50 hover:bg-amber-100 min-w-64 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('brandInput', this)">{{product.brand.name}}</td>
-                <td class="bg-amber-50 hover:bg-amber-100 min-w-64 border-b border-r border-stone-700 text-left px-8 py-4" onclick="setInput('productInput', this)">{{product.name}}</td>
-                <td class="bg-amber-50 border-b border-stone-700 px-8 py-4 w-40 text-center">
+                <td class="bg-amber-50 hover:bg-amber-100 min-w-64 border border-stone-700 text-left px-8 py-1" onclick="setInput('categoryInput', this)">{{product.brand.category.name}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 min-w-64 border border-stone-700 text-left px-8 py-1" onclick="setInput('brandInput', this)">{{product.brand.name}}</td>
+                <td class="bg-amber-50 hover:bg-amber-100 min-w-64 border border-stone-700 text-left px-8 py-1" onclick="setInput('productInput', this)">{{product.name}}</td>
+                <td class="bg-amber-50 border border-stone-700 px-8 py-1 w-40 text-center">
                     <div class="flex justify-between">
                         <div class="pt-[6px]">{{product.amount}}</div>
                         <div class="h-10 pt-1 px-4 border rounded-xl border-stone-700  hover:border-2 hover:border-b-4 shadow-md" onclick="moveToTable2(this)"">></div>

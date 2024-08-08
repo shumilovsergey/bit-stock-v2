@@ -5,9 +5,9 @@ bit-stock
 {% block content %}
 {% load static %}
 
-
+<div class="bg-amber-50 border top-16 left-4 border-stone-700 px-4 py-2 rounded-2xl absolute" id="sum"></div>
 <div>
-    <table class="mb-32 ml-4">
+    <table id="dealTable" class="mb-32 ml-4">
         <thead class="">
             <tr>
                 <td>
@@ -127,6 +127,25 @@ bit-stock
 </div>
 
 <script>
+    function sumColumn() {
+        var table = document.getElementById("dealTable");
+        var sum = 0;
+        const sumElement = document.getElementById('sum');
+        sumElement.textContent = '0';
+
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            if (row.style.display !== "none") {
+                var cellValue = parseFloat(row.cells[4].innerText);
+                if (!isNaN(cellValue)) {
+                    sum += cellValue;
+                }
+            }
+        }
+        sumElement.textContent = `ИТОГО : ${sum}`;
+        
+    }
+    sumColumn();
+
     function filterTable() {
         var typeInput = document.getElementById('type_input').value.toLowerCase();
         var dateInput = document.getElementById('date_input').value.toLowerCase();
@@ -188,6 +207,7 @@ bit-stock
         document.getElementById(filterId).classList.remove('hidden');
         //
         filterTable();
+        sumColumn();
     }
 
     function clearInput(inputId) {
@@ -197,6 +217,7 @@ bit-stock
         document.getElementById(filterId).classList.add('hidden');
         //
         filterTable();
+        sumColumn();
     }
 
 </script>
